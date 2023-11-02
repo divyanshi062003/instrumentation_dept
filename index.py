@@ -4,6 +4,7 @@ from tkinter import ttk
 import customtkinter
 from PIL import ImageTk, Image
 import mysql.connector
+import datetime
 window= Tk()
 window.geometry("655x333")
 window.title("Inventory/Stock Control")
@@ -27,6 +28,14 @@ def check(event):
     for instrument in instruments:
         if search_text in instrument.lower():
             my_list.insert(tk.END, instrument)
+
+def update_label():
+    current_datetime = datetime.datetime.now()
+    formatted_datetime = current_datetime.strftime("%Y-%m-%d %H:%M:%S")
+    l2a.config(text=formatted_datetime)
+    # Schedule the function to run again after 1000 milliseconds (1 second)
+    window.after(1000, update_label)
+
 
 #function to open new page
 def open_new_page(selected_option):
@@ -103,6 +112,13 @@ l1a.pack(side=LEFT, padx=5, pady=5)
 l1b=Label(f1, text="Section - CO & CCO")
 l1b.pack(side=RIGHT, padx=5, pady=5)
 
+f2=Frame(window, borderwidth=5, bg="blue" ,relief=SUNKEN)
+f2.pack(side=tk.BOTTOM, fill="both")
+l2a=Label(f2, text="")
+l2a.pack(side=LEFT, padx=5, pady=5)
+l2b=Label(f2, text="Time-")
+l2b.pack(side=RIGHT, padx=5, pady=5)
+
 f2=Frame(window, borderwidth=6 )
 f2.pack(side=TOP, fill="x")
 img = ImageTk.PhotoImage(Image.open("coke-oven2png.png"))
@@ -130,6 +146,6 @@ my_list.bind("<<ListboxSelect>>",fillout)
 my_entry.bind("<KeyRelease>", check)
 
 
-
+update_label()
 # Start the application
 window.mainloop()
